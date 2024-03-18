@@ -20,7 +20,9 @@ app.use(routes.userRoutes);
 app.use(routes.matchRoutes);
 
 
-
+app.get("/", (req, res) => {
+    res.send("Hello, :)\nThis is my assignment.\nFollow this link to postman : https://www.postman.com/science-observer-72340836/workspace/flyweis/collection/23901864-918644ff-08b3-4ac0-87f9-74558a522af4?action=share&creator=23901864");
+})
 
 
 
