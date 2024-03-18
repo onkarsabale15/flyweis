@@ -124,11 +124,39 @@ const addCashService = async (user, amount) => {
     }
 }
 
+const withdrawCashService = async (user, amount) => {
+    try {
+        const wallet = await models.Wallet.findById(user.wallet);
+        if(!Number(amount)){
+            return { success: false, message: "Invalid amount", status: 400 }
+        }
+        if(wallet){
+            if(wallet.balance >= amount){
+                wallet.balance -= amount;
+                const savedWallet = await wallet.save();
+                if(savedWallet){
+                    return { success: true, message: "Cash withdrawn", status: 200, data: savedWallet }
+                }else{
+                    return { success: false, message: "Cash not withdrawn", status: 404 }
+                }
+            }else{
+                return { success: false, message: "Insufficient balance", status: 400 }
+            }
+        }else{
+            return { success: false, message: "Wallet not found", status: 404 }
+        }
+    } catch (error) {
+        console.log(error);
+        return { success: false, message: "Got Into Error While Getting User By Id", status: 500 }
+    }
+}
+
 const userServices = {
     signUpService,
     getUserByIdService,
     getWalletByIdService,
     getMyTransactionsService,
-    addCashService
+    addCashService,
+    withdrawCashService
 }
 module.exports = userServices;

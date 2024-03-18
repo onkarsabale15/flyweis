@@ -96,6 +96,20 @@ const addCash = async(req,res)=>{
         res.status(500).json({ type: false, message: "Got Into Error While Adding Cash." })
     }
 }
+const withdrawCash = async(req,res)=>{
+    try {
+        const {amount}=req.body;
+        const withdraw = await services.userServices.withdrawCashService(req.user, amount);
+        if(withdraw.success){
+            res.status(200).json({ type: true, message: "Cash Withdrawn", data: withdraw.data })
+        }else{
+            res.status(withdraw.status).json({ type: false, message: withdraw.message })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ type: false, message: "Got Into Error While Withdrawing Cash." })
+    }
+}
 
 const userControllers = {
     signUp,
@@ -104,6 +118,7 @@ const userControllers = {
     getMyTransactions,
     getMyBalance,
     getNotifications,
-    addCash
+    addCash,
+    withdrawCash
 }
 module.exports = userControllers;
