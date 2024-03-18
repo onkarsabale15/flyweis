@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const models = require("../../model/index")
 const validator = require("validator")
 const signUpService = async (
@@ -51,7 +51,7 @@ const signUpService = async (
 }
 const getUserByIdService = async (userId) => {
     try {
-        if (validator.isMongoId(userId)) {
+        if (mongoose.Types.ObjectId.isValid(userId)) {
             const user = await models.User.findById(userId);
             if (user) {
                 return { success: true, message: "User found", status: 200, data: user }
