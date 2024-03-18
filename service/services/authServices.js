@@ -59,7 +59,7 @@ const handleSendOtp = async (mobileNumber) => {
 
 const handleVerifyOtp = async (mobileNumber, otp) => {
     try {
-        if (validator.isMobilePhone(mobileNumber) && Number(otp) && (String(otp).length == 6)) {
+        if (Number(mobileNumber) && Number(otp) && (String(otp).length == 6)) {
             const numberExists = await models.otpModel.findOne({ phoneNumber: mobileNumber })
             if (numberExists) {
                 const lastOtpSent = numberExists.updatedAt
