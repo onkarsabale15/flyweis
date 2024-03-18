@@ -8,6 +8,6 @@ router.get('/api/wallet/:walletId', middlewares.authenticateUser, controllers.us
 router.get('/api/myTransactions', middlewares.authenticateUser, controllers.userControllers.getMyTransactions);
 router.get('/api/myBalance', middlewares.authenticateUser,controllers.userControllers.getMyBalance);
 router.get('/api/notifications', middlewares.authenticateUser, controllers.userControllers.getNotifications);
-router.post('/api/user/addCash', middlewares.authenticateUser, controllers.userControllers.addCash);
-router.post('/api/user/withdraw', middlewares.authenticateUser, controllers.userControllers.withdrawCash);
+router.post('/api/addCash', middlewares.authenticateUser, controllers.userControllers.addCash);
+router.post('/api/withdraw', middlewares.authenticateUser, controllers.userControllers.withdrawCash);
 module.exports = router;
