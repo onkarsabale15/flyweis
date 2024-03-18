@@ -79,7 +79,7 @@ const handleVerifyOtp = async (mobileNumber, otp) => {
                                     return { success: false, message: "Unable to generate token", status: 500 }
                                 }
                             } else {
-                                return { success: true, message: "OTP verified successfully. Please Proceed With SignUp.", status: 200 }
+                                return { success: true, message: "OTP verified successfully.", status: 200 }
                             }
                         } else {
                             return { success: false, message: "Invalid OTP", status: 400 }
