@@ -1,10 +1,13 @@
 const services = require("../../service/index")
 const signUp = async (req, res) => {
     try {
-        // const {name, email, dateOfBirth, gender, location} = req.body;
-        const user = await services.userServices.signUpService(
-            // name, email, dateOfBirth, gender, location
-        );
+        const body = req.body;
+        const user = await services.userServices.signUpService(body);
+        if (user.success) {
+            res.status(201).json({ type: true, message: "User Created Successfully", data: user.data })
+        } else {
+            res.status(user.status).json({ type: false, message: user.message })
+        }
     } catch (error) {
         console.log(error);
         res.status(500).json({ type: false, message: "Error in user signup" })

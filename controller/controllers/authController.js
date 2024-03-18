@@ -28,8 +28,23 @@ const verifyOtp = async(req,res)=>{
         res.json({type:"error",message:"Got into error while verifying otp"}).status(500);
     }
 }
+const signIn = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        const signedIn = await services.userServices.signInService(email, password);
+        if(signedIn.success){
+            res.json({type:true, message:signedIn.message, data:signedIn.data}).status(signedIn.status);
+        }else{
+            res.json({type:false, message:signedIn.message}).status(signedIn.status);
+        }
+    } catch (error) {
+        
+    }
+}
+
 const authController = {
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    signIn
 }
 module.exports = authController;

@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    password:{
+        type: String,
+        required: true
+    },
     dateOfBirth: {
         type: Date,
         required: true
@@ -43,12 +47,10 @@ const userSchema = new mongoose.Schema({
         }
     },
     matches: [{
-        type: objId,
-        unique: true,
+        type: objId
     }],
     wallet: {
         type: objId,
-        unique: true,
         required: true
     },
     notifications: [{ type: String }]
