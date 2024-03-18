@@ -59,36 +59,40 @@ const handleSendOtp = async (mobileNumber) => {
 
 const handleVerifyOtp = async (mobileNumber, otp) => {
     try {
-        if (Number(mobileNumber) && Number(otp) && (String(otp).length == 6)) {
-            const numberExists = await models.otpModel.findOne({ phoneNumber: mobileNumber })
-            if (numberExists) {
-                const lastOtpSent = numberExists.updatedAt
-                if (Date.now() - lastOtpSent > 300000) {
-                    return { success: false, message: "OTP expired. the OTP is valid for 5 minutes only please enter new OTP.", status: 400 }
-                } else {
-                    if (numberExists.otp == otp) {
-                        numberExists.otp = 0;
-                        await numberExists.save();
-                        const user = await models.User.findOne({ mobileNumber: mobileNumber })
-                        if (user) {
-                            const token = await generateJwtToken(user)
-                            if (token.success) {
-                                return { success: true, message: "OTP verified successfully", status: 200, token:token.data }
+        if (validator.isMobilePhone(mobileNumber)) {
+            if(Number(otp)){
+                const numberExists = await models.otpModel.findOne({ phoneNumber: mobileNumber })
+                if (numberExists) {
+                    const lastOtpSent = numberExists.updatedAt
+                    if (Date.now() - lastOtpSent > 300000) {
+                        return { success: false, message: "OTP expired. the OTP is valid for 5 minutes only please enter new OTP.", status: 400 }
+                    } else {
+                        if (numberExists.otp == otp) {
+                            numberExists.otp = 0;
+                            await numberExists.save();
+                            const user = await models.User.findOne({ mobileNumber: mobileNumber })
+                            if (user) {
+                                const token = await generateJwtToken(user)
+                                if (token.success) {
+                                    return { success: true, message: "OTP verified successfully", status: 200, token:token.data }
+                                } else {
+                                    return { success: false, message: "Unable to generate token", status: 500 }
+                                }
                             } else {
-                                return { success: false, message: "Unable to generate token", status: 500 }
+                                return { success: true, message: "OTP verified successfully. Please Proceed With SignUp.", status: 200 }
                             }
                         } else {
-                            return { success: true, message: "OTP verified successfully. Please Proceed With SignUp.", status: 200 }
+                            return { success: false, message: "Invalid OTP", status: 400 }
                         }
-                    } else {
-                        return { success: false, message: "Invalid OTP", status: 400 }
                     }
+                } else {
+                    return { success: false, message: "Number not registered, Please SignUp First.", status: 400 };
                 }
-            } else {
-                return { success: false, message: "Number not registered, Please SignUp First.", status: 400 };
+            }else{
+                return { success: false, message: "Invalid OTP.", status: 400 };
             }
         } else {
-            return { success: false, message: "Invalid mobile number", status: 400 };
+            return { success: false, message: "Invalid mobile number, add phone number only dont add country code.", status: 400 };
         }
     } catch (error) {
         console.log(error);
